@@ -489,12 +489,17 @@ def adauga_contur_si_text(f_dwg,f_multip,f_p,numar,main_cont_bol,cc_bol,f_dic_po
     cat_pos = (text_pos[0],text_pos[1]+2.1*f_multip)
     main_cont=engine.polyline(points=f_pl,flags=1)
     main_cont.close(status=True)
-    f_dwg.add(main_cont)
-    if not main_cont_bol:
+    f_dwg.add(main_cont)     
+    if main_cont_bol:
+        for vertex in f_pl:
+            point = engine.point((1.0,1.0))
+            point['point'] = vertex
+            f_dwg.add(point)
+    else:
         if not cc_bol:
             f_dwg.add(engine.text('%s %s'%(numar,f_categorie),insert=cat_pos, height=2*f_multip))
         f_dwg.add(engine.text(f_parcela,insert=text_pos, height=2*f_multip))
-
+        
         
             
 def generare():
@@ -570,8 +575,7 @@ def generare():
         if len(polylines)>1: del dic_poly[my_poly[0]]
         for el in my_cc_poly:
             cc_poly[el] = dic_poly[el]
-            del dic_poly[el]
-        
+            del dic_poly[el]        
     else:
         my_dic_poly = dic_poly
         
@@ -635,18 +639,28 @@ def generare():
         for m in [50,100,200,500]:
             if m in p_dic and p_dic[m][1]!='4':
                 p_dic.pop(m)
-
+        temp_keys = []
+        for k in p_dic:
+            k_format = p_dic[k]
+            for k2 in p_dic:
+                if k2<k and k_format==p_dic[k2]:
+                    temp_keys.append(k2)
+        temp_keys = set(temp_keys)
+        for key in temp_keys:
+            del p_dic[key]
+        
         scale = min([x for x in p_dic])
         page_format = formats[papers.index(p_dic[scale])]
         #printprint("\nFormat ales: 1:%s "%scale,papers[formats.index(page_format)])
         f_dic = {}
         for k in p_dic:
             f_dic[k] = formats[papers.index(p_dic[k])]
+
         
 
-        if opt==1:
+        if opt in [1,3]:
             out_dic=f_dic
-        elif opt in [2,3]:
+        elif opt == 2:
             out_dic ={scale:page_format}
         
         once = 0    
@@ -679,7 +693,7 @@ def generare():
             #add contour and text
             p_n = 0
             if opt !=3:
-                adauga_contur_si_text(dwg,multip,p,'1',False,False,my_dic_poly)
+                adauga_contur_si_text(dwg,multip,p,'1',True,False,my_dic_poly)
                 dic_poly = {}
                 dic_poly[p] = my_dic_poly[p]
                 p_n+=1
