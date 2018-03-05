@@ -649,14 +649,14 @@ def generare():
         for key in temp_keys:
             del p_dic[key]
         
-        scale = min([x for x in p_dic])
+        f_min = max([x[1] for x in p_dic.items()])
+        scale = [x for x in p_dic if p_dic[x]==f_min][0]
+        #scale = max([x for x in p_dic])
         page_format = formats[papers.index(p_dic[scale])]
         #printprint("\nFormat ales: 1:%s "%scale,papers[formats.index(page_format)])
         f_dic = {}
         for k in p_dic:
             f_dic[k] = formats[papers.index(p_dic[k])]
-
-        
 
         if opt in [1,3]:
             out_dic=f_dic
