@@ -498,6 +498,7 @@ def adauga_contur_si_text(f_dwg,f_multip,f_p,numar,main_cont_bol,cc_bol,f_dic_po
             f_dwg.add(point)
         if opt !=3:
             f_dwg.add(engine.text(f_parcela,insert=text_pos, height=2*f_multip))
+            f_dwg.add(engine.text('%s %s'%(numar,f_categorie),insert=cat_pos, height=2*f_multip))
     else:
         if not cc_bol:
             f_dwg.add(engine.text('%s %s'%(numar,f_categorie),insert=cat_pos, height=2*f_multip))
