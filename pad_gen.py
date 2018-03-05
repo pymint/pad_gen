@@ -42,7 +42,7 @@ from copy import deepcopy
 
 global conditii
 conditii = {0:False, 1:False}
-global categorie, adresa, uat, mentiuni, executant, data, dic_poly,my_dic_poly,cc_poly,limits,centers, vecini,vecini_cond
+global categorie, adresa, uat, mentiuni, executant, data, dic_poly,my_dic_poly,cc_poly,limits,centers, vecini,vecini_cond, opt
 #win=win32console.GetConsoleWindow()
 #win32gui.ShowWindow(win,0)
 
@@ -477,6 +477,7 @@ def adauga_format_pagina(f_dwg,f_center,f_multip,f_page_f,f_index):
     f_dwg.add(poly2)
 
 def adauga_contur_si_text(f_dwg,f_multip,f_p,numar,main_cont_bol,cc_bol,f_dic_poly):
+    global opt
     f_pl=f_p.points
     f_pl=list(dict.fromkeys(f_pl))
     f_parcela = f_dic_poly[f_p]['parcela']
@@ -495,6 +496,8 @@ def adauga_contur_si_text(f_dwg,f_multip,f_p,numar,main_cont_bol,cc_bol,f_dic_po
             point = engine.point((1.0,1.0))
             point['point'] = vertex
             f_dwg.add(point)
+        if opt !=3:
+            f_dwg.add(engine.text(f_parcela,insert=text_pos, height=2*f_multip))
     else:
         if not cc_bol:
             f_dwg.add(engine.text('%s %s'%(numar,f_categorie),insert=cat_pos, height=2*f_multip))
@@ -503,7 +506,7 @@ def adauga_contur_si_text(f_dwg,f_multip,f_p,numar,main_cont_bol,cc_bol,f_dic_po
         
             
 def generare():
-    global dic_poly,my_dic_poly,cc_poly,limits,centers,categorie
+    global dic_poly,my_dic_poly,cc_poly,limits,centers,categorie,opt
     limits = [(180,104), (267,227), (210,277), (390,401), (384,400), (564,648), (631,573)]
     centers = [(0,-31.5),(-5,-86.5),(90,0),(-5,-86.5),(85,0),(-5,-86.5),(85,0)]
     dxf = dxfread(filename)
