@@ -36,15 +36,10 @@ import os.path
 from tkinter import Tk,filedialog,messagebox,Entry,Frame,END,Button,LEFT,BOTTOM,TOP
 from pandas import read_table, read_excel
 from copy import deepcopy
-#import win32console
-#import win32gui
-#from sys import exit
 
-global conditii
-conditii = {0:False, 1:False}
-global categorie, adresa, uat, mentiuni, executant, data, dic_poly,my_dic_poly,cc_poly,limits,centers, vecini,vecini_cond, opt
-#win=win32console.GetConsoleWindow()
-#win32gui.ShowWindow(win,0)
+global categorie, adresa, uat, mentiuni, executant, data, dic_poly,my_dic_poly,cc_poly,limits,centers, vecini,vecini_cond, opt, conditii, actualizare
+conditii = {0:False, 1:False, 2:False}
+
 
 path = os.getcwd()
 
@@ -89,13 +84,11 @@ def get_config():
     d.insert(0, data)
 
 def alege_fisier():
-    #messagebox.showinfo("Generare pad-uri", "Alege fisierul dxf")
     global filename, conditii
     filename = filedialog.askopenfilename()
     conditii[0] = True
 
 def alege_director():
-    #messagebox.showinfo("Generare pad-uri", "Alege directorul pentru salvare pad-uri in format dxf")
     global folder, conditii
     folder = filedialog.askdirectory()
     conditii[1] = True
@@ -121,7 +114,7 @@ def ajutor():
     messagebox.showinfo("Generare pad-uri", text_ajutor)
 
 def actualizeaza():
-    global categorie, adresa, uat, mentiuni, executant, data
+    global categorie, adresa, uat, mentiuni, executant, data, conditii
     try:
         categorie = c.get()
         adresa = a.get()
@@ -130,6 +123,7 @@ def actualizeaza():
         executant = e.get()
         data = d.get()
         messagebox.showinfo("Generare pad-uri", "Categorie de folosinta implicita: %s\nAdresa imobil: %s\nUAT: %s\nMentiuni: %s\nExecutant: %s\nData: %s"%(categorie, adresa, uat, mentiuni, executant, data))
+        conditii[2] = True
     except:
         messagebox.showinfo("Generare pad-uri", "A apatur o eroare\n\nTe rog completeaza toate campurile")
 
@@ -393,14 +387,9 @@ def salveaza_inventar(f_p):
                 break
             else:
                 nf+=1
-    #f = open('%s_Inventar.doc'%f_parcela.replace("/","_"),'w')
     f = open(file,'w')
-    #fc = open('%s_Calc_Anal.doc'%f_parcela.replace("/","_"),'w')
     f.write('Inventar de coordonate\n')
-    #fc.write('2 .S =  Xi ( Yi+1 –Yi-1 )\n')
-    #fc.write('Calcul analitic suprafata teren\n')
     f.write(tabulate(table,headers=['Nr.','X','Y'],tablefmt='grid',floatfmt='.3f'))
-    #fc.write(tabulate(f_table,headers=['Nr.','X','Y'],tablefmt='grid'))
     f.write('\nS=%d mp'%my_dic_poly[f_p]['pl_area'])
     for cc in cc_poly:
         cc_pl = cc.points
@@ -412,9 +401,7 @@ def salveaza_inventar(f_p):
         f.write('\n\n%s\n'%cc_poly[cc]['parcela'])
         f.write(tabulate(table,headers=['Nr.','X','Y'],tablefmt='grid',floatfmt='.3f'))
         f.write('\nS=%d mp'%cc_poly[cc]['pl_area'])
-    #fc.write('\nS=%d mp'%pl_area)
     f.close()
-    #fc.close()
 
 def cotare(f_dwg,f_p,f_multip):
     f_pl = f_p.points
@@ -507,7 +494,9 @@ def adauga_contur_si_text(f_dwg,f_multip,f_p,numar,main_cont_bol,cc_bol,f_dic_po
         
             
 def generare():
-    global dic_poly,my_dic_poly,cc_poly,limits,centers,categorie,opt
+    global dic_poly,my_dic_poly,cc_poly,limits,centers,categorie,opt, conditii
+    if not conditii[2]:
+        actualizeaza()
     limits = [(180,104), (267,227), (210,277), (390,401), (384,400), (564,648), (631,573)]
     centers = [(0,-31.5),(-5,-86.5),(90,0),(-5,-86.5),(85,0),(-5,-86.5),(85,0)]
     dxf = dxfread(filename)
