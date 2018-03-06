@@ -643,11 +643,12 @@ def generare():
         for m in [50,100,200,500]:
             if m in p_dic and p_dic[m][1]!='4':
                 p_dic.pop(m)
+                
         temp_keys = []
         for k in p_dic:
             k_format = p_dic[k]
             for k2 in p_dic:
-                if k2<k and k_format==p_dic[k2]:
+                if k2>k and k_format==p_dic[k2]:
                     temp_keys.append(k2)
         temp_keys = set(temp_keys)
         for key in temp_keys:
@@ -655,9 +656,8 @@ def generare():
         
         f_min = max([x[1] for x in p_dic.items()])
         scale = [x for x in p_dic if p_dic[x]==f_min][0]
-        #scale = max([x for x in p_dic])
         page_format = formats[papers.index(p_dic[scale])]
-        #printprint("\nFormat ales: 1:%s "%scale,papers[formats.index(page_format)])
+        #print("\nFormat ales: 1:%s "%scale,papers[formats.index(page_format)])
         f_dic = {}
         for k in p_dic:
             f_dic[k] = formats[papers.index(p_dic[k])]
