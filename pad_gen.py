@@ -81,8 +81,6 @@ def get_config():
         d.insert(0, data)
         conditii[2] = True
     except: messagebox.showinfo("Generare pad-uri", "Ultima configuratie folosita nu a putut fi identificata")
-           #categorie, adresa, uat, mentiuni, executant, data
-    
 
 def alege_fisier():
     global filename, conditii
@@ -123,10 +121,12 @@ def actualizeaza():
         mentiuni = m.get()
         executant = e.get()
         data = d.get()
-        messagebox.showinfo("Generare pad-uri", "Categorie de folosinta implicita: %s\nAdresa imobil: %s\nUAT: %s\nMentiuni: %s\nExecutant: %s\nData: %s"%(categorie, adresa, uat, mentiuni, executant, data))
+        #messagebox.showinfo("Generare pad-uri", "Categorie de folosinta implicita: %s\nAdresa imobil: %s\nUAT: %s\nMentiuni: %s\nExecutant: %s\nData: %s"%(categorie, adresa, uat, mentiuni, executant, data))
         conditii[2] = True
+        return True
     except:
-        messagebox.showinfo("Generare pad-uri", "A apatur o eroare\n\nTe rog completeaza toate campurile")
+        messagebox.showinfo("Generare pad-uri", "A aparut o eroare\n\nTe rog completeaza toate campurile")
+        return False
 
 def save_config():
     try:
@@ -497,7 +497,8 @@ def adauga_contur_si_text(f_dwg,f_multip,f_p,numar,main_cont_bol,cc_bol,f_dic_po
 def generare():
     global dic_poly,my_dic_poly,cc_poly,limits,centers,categorie,opt, conditii
     if not conditii[2]:
-        actualizeaza()
+        if not actualizeaza():
+            return
     limits = [(180,104), (267,227), (210,277), (390,401), (384,400), (564,648), (631,573)]
     centers = [(0,-31.5),(-5,-86.5),(90,0),(-5,-86.5),(85,0),(-5,-86.5),(85,0)]
     dxf = dxfread(filename)
@@ -782,12 +783,12 @@ if __name__ == "__main__":
                        text="Ajutor",
                        command=ajutor)
     b_director.pack(side=LEFT)
-
+    '''
     b_director = Button(bottomframe,
                        text="Actualizeaza informatii",
                        fg="blue",
                        command=actualizeaza)
-    b_director.pack(side=TOP)
+    b_director.pack(side=TOP)'''
 
     b_director = Button(bottomframe,
                        text="Salveaza configuratie",
