@@ -40,7 +40,6 @@ from copy import deepcopy
 global categorie, adresa, uat, mentiuni, executant, data, dic_poly,my_dic_poly,cc_poly,limits,centers, vecini,vecini_cond, opt, conditii, actualizare
 conditii = {0:False, 1:False, 2:False}
 
-
 path = os.getcwd()
 
 vecini_cond = False
@@ -57,7 +56,7 @@ formats2 = [(180,277),(277,400),(390,277),(400,574),(574,400),(574,821),(821,574
 cc_list = ['C%d'%x for x in range(1,100)] 
 
 def get_config():
-    global categorie, adresa, uat, mentiuni, executant, data
+    global categorie, adresa, uat, mentiuni, executant, data, conditii
     try:
         config = read_table('%s\\config.txt'%path,header=None,delimiter='   ')
         config.set_index(0,inplace=True)
@@ -68,20 +67,22 @@ def get_config():
         executant = config.loc['executant',1]
         data = config.loc['data',1]
         messagebox.showinfo("Generare pad-uri", "Categorie de folosinta implicita: %s\nAdresa imobil: %s\nUAT: %s\nMentiuni: %s\nExecutant: %s\nData: %s"%(categorie, adresa, uat, mentiuni, executant, data))
+        c.delete(0, END)
+        c.insert(0, categorie)
+        a.delete(0, END)
+        a.insert(0, adresa)
+        u.delete(0, END)
+        u.insert(0, uat)
+        m.delete(0, END)
+        m.insert(0, mentiuni)
+        e.delete(0, END)
+        e.insert(0, executant)
+        d.delete(0, END)
+        d.insert(0, data)
+        conditii[2] = True
     except: messagebox.showinfo("Generare pad-uri", "Ultima configuratie folosita nu a putut fi identificata")
            #categorie, adresa, uat, mentiuni, executant, data
-    c.delete(0, END)
-    c.insert(0, categorie)
-    a.delete(0, END)
-    a.insert(0, adresa)
-    u.delete(0, END)
-    u.insert(0, uat)
-    m.delete(0, END)
-    m.insert(0, mentiuni)
-    e.delete(0, END)
-    e.insert(0, executant)
-    d.delete(0, END)
-    d.insert(0, data)
+    
 
 def alege_fisier():
     global filename, conditii
