@@ -129,6 +129,7 @@ def actualizeaza():
         return False
 
 def save_config():
+    actualizeaza()
     try:
         fisier = open('%s\\config.txt'%path,'w')
         fisier.write('categorie   %s\nadresa   %s\nuat   %s\nmentiuni   %s\nexecutant   %s\ndata   %s'%(categorie, adresa, uat, mentiuni, executant, data))
